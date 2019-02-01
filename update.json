@@ -1,0 +1,10 @@
+{
+  "homepage": "",
+  "promos": {
+    "1.10.2-latest"     : "1.0b",
+    "1.10.2-recommended" : "1.0b"
+  },
+  "1.10.2" : {
+    "1.0b" : "Initial Release Build"
+  }
+}
