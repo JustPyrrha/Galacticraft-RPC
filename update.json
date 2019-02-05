@@ -1,10 +1,11 @@
 {
   "homepage": "",
   "promos": {
-    "1.10.2-latest"     : "1.0b",
-    "1.10.2-recommended" : "1.0b"
+    "1.10.2-latest"      : "0.1.0-alpha+2",
+    "1.10.2-recommended" : "0.1.0-alpha+2"
   },
   "1.10.2" : {
-    "1.0b" : "Initial Release Build"
+    "0.1.0-alpha+2" : "Added all dims accessable by Galacticraft and Extra Planets",
+    "0.1.0-alpha+1" : "Initial Release Build"
   }
 }
