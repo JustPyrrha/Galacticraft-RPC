@@ -2,13 +2,13 @@
 {
   "modid": "rpc",
   "name": "PPO RPC",
-  "description": "A custom Discord Rich Presence mod for Project Pluto",
+  "description": "A custom Discord Rich Presence mod for Project Pluto Official",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "https://github.com/JoeZwet/PPO-RPC/blob/master/update.json",
   "authorList": ["JoeZwet"],
-  "credits": "MinnDevelopment for the java-discord-rpc wrapper.",
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
