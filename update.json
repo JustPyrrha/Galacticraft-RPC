@@ -1,11 +1,11 @@
 {
   "homepage": "https://joezwet.me/mods/ppo-rpc",
   "promos": {
-    "1.10.2-latest"      : "0.1.0-alpha+2",
-    "1.10.2-recommended" : "0.1.0-alpha+2"
+    "1.10.2-latest"      : "1.0.0+1",
+    "1.10.2-recommended" : "1.0.0+1"
   },
   "1.10.2" : {
-    "0.1.0-alpha+2" : "Added all dims accessable by Galacticraft and Extra Planets",
-    "0.1.0-alpha+1" : "Initial Release Build"
+    "1.0.0+1" : "Added all dims accessable by Galacticraft and Extra Planets",
+    "0.1.0-beta+1" : "Initial Release Build"
   }
 }

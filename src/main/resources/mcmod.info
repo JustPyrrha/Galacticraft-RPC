@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "rpc",
+  "name": "PPO RPC",
+  "description": "A custom Discord Rich Presence mod for Project Pluto",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "updateUrl": "https://github.com/JoeZwet/PPO-RPC/blob/master/update.json",
+  "authorList": ["JoeZwet"],
+  "credits": "MinnDevelopment for the java-discord-rpc wrapper.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
