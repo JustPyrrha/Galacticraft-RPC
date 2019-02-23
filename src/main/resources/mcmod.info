@@ -11,6 +11,6 @@
   "credits": "Micdoodle8 & Radfast for creating Galacticraft mod, MJRLegends for help with the Galacticraft API",
   "logoFile": "logo.png",
   "screenshots": ["screenshot1.png", "screenshot2.png"],
-  "dependencies": ["Galacticraft-Core", "Galacticraft-Planets"]
+  "dependencies": ["GalacticraftCore"]
 }
 ]

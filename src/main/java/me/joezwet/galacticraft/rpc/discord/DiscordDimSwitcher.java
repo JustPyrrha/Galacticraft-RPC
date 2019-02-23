@@ -1,6 +1,7 @@
 package me.joezwet.galacticraft.rpc.discord;
 
 import me.joezwet.galacticraft.rpc.RPC;
+import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
 import java.time.OffsetDateTime;
@@ -10,6 +11,8 @@ public class DiscordDimSwitcher {
     public static void switchDim(int dim) {
 
         DiscordRichPresence presence = RPC.instance.discord.getPresence();
+
+        GalaxyRegistry.getCelestialBodyFromDimensionID(dim).getName();
 
         switch(dim) {
             case 1:
