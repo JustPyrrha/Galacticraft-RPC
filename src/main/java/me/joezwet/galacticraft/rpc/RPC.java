@@ -1,8 +1,8 @@
-package me.joezwet.projectpluto.rpc;
+package me.joezwet.galacticraft.rpc;
 
-import me.joezwet.projectpluto.rpc.discord.Discord;
-import me.joezwet.projectpluto.rpc.proxy.CommonProxy;
-import me.joezwet.projectpluto.rpc.util.Strings;
+import me.joezwet.galacticraft.rpc.proxy.CommonProxy;
+import me.joezwet.galacticraft.rpc.util.Strings;
+import me.joezwet.galacticraft.rpc.discord.Discord;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -10,13 +10,13 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Strings.MODID, name = Strings.NAME, version = Strings.VERSION, updateJSON = Strings.UPDATEJSON)
+@Mod(modid = Strings.MODID, name = Strings.NAME, version = Strings.VERSION, updateJSON = Strings.UPDATEJSON, dependencies = "required-after:galacticraftplanets;")
 public class RPC {
 
     @Mod.Instance
     public static RPC instance;
 
-    @SidedProxy(clientSide = "me.joezwet.projectpluto.rpc.proxy.ClientProxy", serverSide = "me.joezwet.projectpluto.rpc.proxy.CommonProxy")
+    @SidedProxy(clientSide = "me.joezwet.galacticraft.rpc.proxy.ClientProxy", serverSide = "me.joezwet.galacticraft.rpc.proxy.CommonProxy")
     public static CommonProxy proxy;
 
     public Discord discord;

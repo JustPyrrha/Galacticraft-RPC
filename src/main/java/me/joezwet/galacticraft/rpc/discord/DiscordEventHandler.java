@@ -1,16 +1,12 @@
-package me.joezwet.projectpluto.rpc.discord;
+package me.joezwet.galacticraft.rpc.discord;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import ibxm.Player;
-import me.joezwet.projectpluto.rpc.RPC;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.model.ItemLayerModel;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -20,12 +16,10 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
-
 
 public class DiscordEventHandler {
 
-    private Logger logger = LogManager.getLogger("Discord");
+    private Logger logger = LogManager.getLogger("Galacticraft RPC");
     private int serverType = 0;
 
     @SubscribeEvent
@@ -37,11 +31,6 @@ public class DiscordEventHandler {
                     .build()
             );
         }
-    }
-
-    @SubscribeEvent
-    public void onWorldSwitch(PlayerEvent.PlayerChangedDimensionEvent event) {
-        logger.info("Switch Dim ID: {}",event.toDim);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -63,7 +52,6 @@ public class DiscordEventHandler {
         if(ForgeVersion.getResult(Loader.instance().activeModContainer()).status == ForgeVersion.Status.OUTDATED) {
             event.player.addChatMessage(new TextComponentString(ChatFormatting.BLUE + "[Discord] New version available: " + ForgeVersion.getResult(Loader.instance().activeModContainer()).target.toString()));
         }
-
     }
 
     @SubscribeEvent

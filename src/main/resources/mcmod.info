@@ -1,16 +1,16 @@
 [
 {
-  "modid": "rpc",
-  "name": "PPO RPC",
-  "description": "A custom Discord Rich Presence mod for Project Pluto Official",
+  "modid": "gc-rpc",
+  "name": "Galacticraft Rich Presence",
+  "description": "A Discord Rich Presence mod for Galacticraft and add-ons",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "https://github.com/JoeZwet/PPO-RPC/blob/master/update.json",
+  "url": "https://joezwet.me/mods/gc-rpc",
+  "updateUrl": "https://github.com/JoeZwet/Galacticraft-RPC/blob/master/update.json",
   "authorList": ["JoeZwet"],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "credits": "Micdoodle8 & Radfast for creating Galacticraft mod, MJRLegends for help with the Galacticraft API",
+  "logoFile": "logo.png",
+  "screenshots": ["screenshot1.png", "screenshot2.png"],
+  "dependencies": ["Galacticraft-Core", "Galacticraft-Planets"]
 }
 ]

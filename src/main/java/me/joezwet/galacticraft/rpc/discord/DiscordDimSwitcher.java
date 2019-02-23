@@ -1,6 +1,6 @@
-package me.joezwet.projectpluto.rpc.discord;
+package me.joezwet.galacticraft.rpc.discord;
 
-import me.joezwet.projectpluto.rpc.RPC;
+import me.joezwet.galacticraft.rpc.RPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
 import java.time.OffsetDateTime;
@@ -73,7 +73,6 @@ public class DiscordDimSwitcher {
                 presence.details = "Playing on the Official server";
                 break;
         }
-
 
         RPC.instance.discord.setPresence(presence);
     }

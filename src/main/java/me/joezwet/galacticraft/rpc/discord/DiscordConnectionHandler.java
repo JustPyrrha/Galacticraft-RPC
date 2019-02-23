@@ -1,4 +1,4 @@
-package me.joezwet.projectpluto.rpc.discord;
+package me.joezwet.galacticraft.rpc.discord;
 
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
@@ -17,7 +17,7 @@ public class DiscordConnectionHandler {
 
 
     public DiscordConnectionHandler() {
-        logger = LogManager.getLogger("Discord");
+        logger = LogManager.getLogger("Galactiraft RPC");
         init();
     }
 
@@ -34,12 +34,13 @@ public class DiscordConnectionHandler {
                     } else {
                         avatar_url += discordUser.userId + "/" + discordUser.avatar + ".png";
                     }
-                    LogManager.getLogger("Discord").info("RPC Ready. Registered user {}#{} (ID: {}, avatar: {})", discordUser.username, discordUser.discriminator, discordUser.userId, avatar_url);
+                   System.out.println(String.format("RPC Ready. Registered user %s#%s (ID: %s, avatar: %s)", discordUser.username, discordUser.discriminator, discordUser.userId, avatar_url));
+                   logger.info(String.format("RPC Ready. Registered user %s#%s (ID: %s, avatar: %s)", discordUser.username, discordUser.discriminator, discordUser.userId, avatar_url));
                 })).build();
 
         DiscordRPC.discordInitialize(appId, handlers, true);
 
-        DiscordRichPresence richPresence = new DiscordRichPresence.Builder("Loading Modpack...")
+        DiscordRichPresence richPresence = new DiscordRichPresence.Builder("Loading Minecraft...")
                 .setBigImage("planet_pluto", "")
                 .setStartTimestamps(OffsetDateTime.now().toEpochSecond())
                 .build();
@@ -50,7 +51,7 @@ public class DiscordConnectionHandler {
 
     private void startThread() {
         if(callbackThread != null) {
-            LogManager.getLogger("Discord").info("Starting callback thread.");
+            logger.info("Starting callback thread.");
             callbackThread = new Thread(() -> {
                 while (true) {
                     try {

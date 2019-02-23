@@ -1,4 +1,4 @@
-package me.joezwet.projectpluto.rpc.discord;
+package me.joezwet.galacticraft.rpc.discord;
 
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;

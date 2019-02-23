@@ -1,13 +1,13 @@
-package me.joezwet.projectpluto.rpc.proxy;
+package me.joezwet.galacticraft.rpc.proxy;
 
-import me.joezwet.projectpluto.rpc.discord.DiscordConnectionHandler;
-import me.joezwet.projectpluto.rpc.discord.DiscordEventHandler;
+import me.joezwet.galacticraft.rpc.discord.DiscordConnectionHandler;
+import me.joezwet.galacticraft.rpc.discord.DiscordEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class ClientProxy extends  CommonProxy {
+public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

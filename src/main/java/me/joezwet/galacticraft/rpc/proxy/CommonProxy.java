@@ -1,4 +1,4 @@
-package me.joezwet.projectpluto.rpc.proxy;
+package me.joezwet.galacticraft.rpc.proxy;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
