@@ -1,6 +1,7 @@
 package me.joezwet.galacticraft.rpc.discord;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraft.client.Minecraft;

@@ -1,5 +1,6 @@
 package me.joezwet.galacticraft.rpc.discord;
 
+import com.sun.scenario.effect.Offset;
 import me.joezwet.galacticraft.rpc.RPC;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import net.arikia.dev.drpc.DiscordRichPresence;
@@ -11,51 +12,20 @@ public class DiscordDimSwitcher {
     public static void switchDim(int dim) {
 
         DiscordRichPresence presence = RPC.instance.discord.getPresence();
+        Dimension dimension = RPC.instance.dimensionInfo.getDimensionInfo(dim);
 
-        GalaxyRegistry.getCelestialBodyFromDimensionID(dim).getName();
-
-        switch(dim) {
-            case 1:
-                presence.state = "Exploring the End";
-                presence.largeImageKey = "planet_earth";
-                presence.largeImageText = "Earth";
-                break;
-            case 0:
-                presence.state = "Exploring Earth";
-                presence.largeImageKey = "planet_earth";
-                presence.largeImageText = "Earth";
-                break;
-            case -1:
-                presence.state = "Exploring the Nether";
-                presence.largeImageKey = "planet_earth";
-                presence.largeImageText = "Earth";
-                break;
-            case -27:
-                presence.state = "Orbiting Earth in a Space Station";
-                presence.largeImageKey = "planet_earth";
-                presence.largeImageText = "Earth";
-                break;
-            case -28:
-                presence.state = "Exploring the Moon";
-                presence.largeImageKey = "moon_moon";
-                presence.largeImageText = "The Moon";
-                break;
-            case -29:
-                presence.state = "Exploring Mars";
-                presence.largeImageKey = "planet_mars";
-                presence.largeImageText = "Mars";
-                break;
-            case -30:
-                presence.state = "Dodging Asteroids";
-                presence.largeImageKey = "planet_earth";
-                presence.largeImageText = "Earth";
-                break;
-            case -31:
-                presence.state = "Exploring Venus";
-                presence.largeImageKey = "planet_venus";
-                presence.largeImageText = "Venus";
-                break;
+        if(dimension == null) {
+            presence.state = "Exploring";
+            presence.largeImageText = "";
+            presence.largeImageKey = "";
+            presence.startTimestamp = OffsetDateTime.now().toEpochSecond();
+            RPC.instance.discord.setPresence(presence);
+            return;
         }
+
+        presence.state = dimension.getState();
+        presence.largeImageKey = dimension.getLargeImageKey();
+        presence.largeImageText = dimension.getLargeImageText();
 
         presence.startTimestamp = OffsetDateTime.now().toEpochSecond();
         RPC.instance.discord.setPresence(presence);
@@ -70,10 +40,7 @@ public class DiscordDimSwitcher {
                 presence.details = "Playing Singleplayer";
                 break;
             case 1:
-                presence.details = "Playing on a server";
-                break;
-            case 2:
-                presence.details = "Playing on the Official server";
+                presence.details = "Playing Multiplayer";
                 break;
         }
 
