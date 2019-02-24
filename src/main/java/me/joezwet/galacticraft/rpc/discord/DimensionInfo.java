@@ -40,6 +40,22 @@ public class DimensionInfo {
             this.largeImageKey = largeImageKey;
             this.largeImageText = largeImageText;
         }
+
+        public String getState() {
+            return state;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+        public String getLargeImageKey() {
+            return largeImageKey;
+        }
+
+        public String getLargeImageText() {
+            return largeImageText;
+        }
     }
 
 }
