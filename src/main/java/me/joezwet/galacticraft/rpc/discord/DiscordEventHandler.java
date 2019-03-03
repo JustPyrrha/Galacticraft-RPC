@@ -18,6 +18,7 @@
 
 package me.joezwet.galacticraft.rpc.discord;
 
+import com.google.gson.annotations.Since;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.joezwet.galacticraft.rpc.RPC;
 import me.joezwet.galacticraft.rpc.util.FieldUtils;
@@ -52,14 +53,12 @@ import java.util.List;
 public class DiscordEventHandler {
 
     private Logger logger = LogManager.getLogger("Galacticraft RPC");
-    private int serverType = 0;
-    private boolean hasSentFirstLogin = false;
-    private int tick = 0;
+    private boolean firstInfoSent = false;
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void guiScreenDetect(GuiScreenEvent.InitGuiEvent.Pre event) {
-        if(event.getGui() instanceof GuiMainMenu) {
+        if (event.getGui() instanceof GuiMainMenu) {
             logger.info("Detected main menu, updating presence");
             DiscordRPC.discordUpdatePresence(new DiscordRichPresence.Builder("On the Main Menu")
                     .setBigImage("planet_pluto", "")
@@ -67,87 +66,34 @@ public class DiscordEventHandler {
             );
         }
     }
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent e) {
-        hasSentFirstLogin = false;
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        try {
+            if(!firstInfoSent) {
+                DiscordDimSwitcher.switchDim(Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension());
+                firstInfoSent = true;
+            }
+        } catch (NoSuchMethodError | NoSuchFieldError  | NullPointerException error) {
+            firstInfoSent = false;
+            // Yeet that error into the sunset, minecraft is still loading
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onPlayerLoggedout(PlayerEvent.PlayerLoggedOutEvent e) {
+        firstInfoSent = false;
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent()
     public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        if(!event.isLocal()) {
+        if (!event.isLocal()) {
             DiscordDimSwitcher.switchDim(1);
         } else {
             DiscordDimSwitcher.switchServer(0);
         }
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(hasSentFirstLogin) {
-            DiscordTeamUpdater.updateTeam(event.player.getName());
-            return;
-        }
-
-        if(FieldUtils.objectHasProperty(event.player, "dimension")) {
-            System.out.println("Dim Checked out");
-            RPC.instance.dimensionInfo.registerDimensionInfo(-1, new Dimension("Exploring the Nether", "planet_earth", "Earth"));
-            RPC.instance.dimensionInfo.registerDimensionInfo(0, new Dimension("Exploring Earth", "planet_earth", "Earth"));
-            RPC.instance.dimensionInfo.registerDimensionInfo(1, new Dimension("Exploring The End", "planet_earth", "Earth"));
-
-            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(0).toString());
-            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(-1).toString());
-            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(1).toString());
-
-            LogManager.getLogger("Galacticraft RPC").info("Checking planet ids..");
-            GalaxyRegistry.getRegisteredPlanets().forEach((s,p) -> {
-                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + p.getDimensionID() + " i:" + p.getID());
-                if (p.getDimensionID() != -1 && p.getDimensionID() != 0) {
-                    String capName = s.substring(0, 1).toUpperCase() + s.substring(1);
-                    RPC.instance.dimensionInfo.registerDimensionInfo(p.getDimensionID(), new Dimension("Exploring " + capName, "planet_" + s, capName));
-                }
-            });
-
-            LogManager.getLogger("Galacticraft RPC").info("Checking moon ids..");
-            GalaxyRegistry.getRegisteredMoons().forEach((s,m) -> {
-                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + m.getDimensionID() + " i:" + m.getID());
-                if (m.getDimensionID() != -1 && m.getDimensionID() != 0) {
-                    String capName = s.substring(0, 1).toUpperCase() + s.substring(1);
-                    if(capName.equalsIgnoreCase("moon")) {
-                        RPC.instance.dimensionInfo.registerDimensionInfo(m.getDimensionID(), new Dimension("Exploring the " + capName, "moon_" + s, capName));
-                    } else {
-                        RPC.instance.dimensionInfo.registerDimensionInfo(m.getDimensionID(), new Dimension("Exploring " + capName, "moon_" + s, capName));
-                    }
-
-                }
-            });
-
-            LogManager.getLogger("Galacticraft RPC").info("Checking space station ids..");
-            GalaxyRegistry.getRegisteredSatellites().forEach((s,l) -> {
-                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + l.getDimensionID() + " i:" + l.getID());
-                String capName = l.getParentPlanet().getName().substring(0,1).toUpperCase() + l.getParentPlanet().getName().substring(1);
-                RPC.instance.dimensionInfo.registerDimensionInfo(l.getDimensionID(), new Dimension("Orbiting " + capName, "planet_" + l.getParentPlanet().getName(), capName));
-            });
-
-            DiscordDimSwitcher.switchDim(event.player.dimension);
-            hasSentFirstLogin = true;
-        }
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onPlayerSwitchDim(PlayerEvent.PlayerChangedDimensionEvent event) {
-        DiscordDimSwitcher.switchDim(event.toDim);
-    }
-
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-        hasSentFirstLogin = false;
-        RPC.instance.dimensionInfo.clearDimensions();
     }
 }

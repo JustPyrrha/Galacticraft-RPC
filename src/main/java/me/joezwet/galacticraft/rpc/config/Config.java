@@ -18,10 +18,6 @@
 
 package me.joezwet.galacticraft.rpc.config;
 
-import me.joezwet.galacticraft.rpc.RPC;
-import me.joezwet.galacticraft.rpc.discord.DimensionInfo;
-import net.minecraft.client.Minecraft;
-
 public class Config {
 
     private General general;

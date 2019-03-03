@@ -19,7 +19,6 @@
 package me.joezwet.galacticraft.rpc;
 
 import me.joezwet.galacticraft.rpc.config.ConfigHandler;
-import me.joezwet.galacticraft.rpc.discord.DimensionInfo;
 import me.joezwet.galacticraft.rpc.proxy.CommonProxy;
 import me.joezwet.galacticraft.rpc.util.Strings;
 import me.joezwet.galacticraft.rpc.discord.Discord;
@@ -39,16 +38,13 @@ public class RPC {
     @SidedProxy(clientSide = "me.joezwet.galacticraft.rpc.proxy.ClientProxy", serverSide = "me.joezwet.galacticraft.rpc.proxy.CommonProxy")
     public static CommonProxy proxy;
 
-    public DimensionInfo dimensionInfo;
     public Discord discord;
     public ConfigHandler config;
-    public String currentPlanetName;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         instance = this;
         discord = new Discord(new DiscordRichPresence());
-        dimensionInfo = new DimensionInfo();
         config = new ConfigHandler();
         proxy.preInit(event);
     }
@@ -61,13 +57,5 @@ public class RPC {
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-    }
-
-    public String getCurrentPlanetName() {
-        return currentPlanetName;
-    }
-
-    public void setCurrentPlanetName(String currentPlanetName) {
-        this.currentPlanetName = currentPlanetName;
     }
 }

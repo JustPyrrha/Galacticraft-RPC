@@ -21,7 +21,7 @@ package me.joezwet.galacticraft.rpc.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.joezwet.galacticraft.rpc.util.Strings;
-import net.minecraft.client.Minecraft;
+import me.joezwet.galacticraft.rpc.util.Utils;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
@@ -37,13 +37,31 @@ public class ConfigHandler {
 
     public Config getConfig() {
         Gson gson = new GsonBuilder().registerTypeAdapter(Config.class, new ConfigSerializer()).create();
-        File file = new File(Minecraft.getMinecraft().mcDataDir, Strings.CONFIG_PATH);
+        File file = new File(
+                Utils.getMcDir(),
+                Strings.CONFIG_PATH
+        );
         String configS = "";
-        if(!file.exists()) {
+        if (!file.exists()) {
             LogManager.getLogger("Galacticraft RPC").warn("Could not find config file, generating it for you.");
-            //copy(ConfigHandler.class.getResourceAsStream("config.json"), file.getPath());
             try {
                 FileWriter writer = new FileWriter(file);
+                String defaultConfig = "{\n" +
+                        "    \"general\": {\n" +
+                        "        \"icon\": \"NONE\",\n" +
+                        "        \"show_planet\": true,\n" +
+                        "        \"show_moon\": true,\n" +
+                        "        \"show_station\": true\n" +
+                        "    },\n" +
+                        "    \"messages\": {\n" +
+                        "        \"on_planet\": \"Exploring @PLANET@\",\n" +
+                        "        \"on_moon\": \"Exploring @PLANET@\",\n" +
+                        "        \"on_station\": \"Orbiting @PARENT@\",\n" +
+                        "        \"singleplayer\": \"Playing Singleplayer\",\n" +
+                        "        \"multiplayer\": \"Playing Multiplayer\",\n" +
+                        "        \"icon_text\": \"Playing X Modpack on the Twitch Launcher.\"\n" +
+                        "    }\n" +
+                        "}";
                 writer.write(defaultConfig);
                 writer.close();
             } catch (IOException e) {
@@ -60,46 +78,5 @@ public class ConfigHandler {
             e.printStackTrace();
         }
         return gson.fromJson(configS, Config.class);
-    }
-
-    private String defaultConfig  = "{\n" +
-            "  \"general\": {\n" +
-            "    \"icon\": \"NONE\",\n" +
-            "    \"show_planet\": true,\n" +
-            "    \"show_moon\": true,\n" +
-            "    \"show_station\": true\n" +
-            "  },\n" +
-            "  \"messages\": {\n" +
-            "    \"on_planet\": \"Exploring ${PLANET}\",\n" +
-            "    \"on_moon\": \"Exploring ${PLANET}\",\n" +
-            "    \"on_station\": \"Orbiting ${PARENT}\",\n" +
-            "    \"singleplayer\": \"Playing Singleplayer\",\n" +
-            "    \"multiplayer\": \"Playing Multiplayer\",\n" +
-            "    \"icon_text\": \"Playing X Modpack on the Twitch Launcher.\"\n" +
-            "  }\n" +
-            "}";
-
-    /**
-     * Copy a file from source to destination.
-     *
-     * @param source
-     *        the source
-     * @param destination
-     *        the destination
-     * @return True if succeeded , False if not
-     */
-    public static boolean copy(InputStream source , String destination) {
-        boolean success = true;
-        try {
-            Files.copy(
-                    source,
-                    Paths.get(destination),
-                    StandardCopyOption.REPLACE_EXISTING
-            );
-        } catch (IOException ex) {
-            LogManager.getLogger("Galacticraft RPC").warn(ex);
-            success = false;
-        }
-        return success;
     }
 }

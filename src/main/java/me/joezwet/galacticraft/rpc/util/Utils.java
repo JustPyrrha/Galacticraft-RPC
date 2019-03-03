@@ -18,12 +18,28 @@
 
 package me.joezwet.galacticraft.rpc.util;
 
+import net.minecraft.client.Minecraft;
+
+import java.io.File;
+
 public class Utils {
 
-    private String replacePlaceholders(String input, String p) {
+    public static String replacePlaceholders(String input, String p) {
         String output;
         output = input.replaceAll("@PLANET@", p);
         output = output.replaceAll("@PARENT@", p);
         return output;
+    }
+
+    public static File getMcDir()
+    {
+        try {
+            if (Minecraft.getMinecraft().getCurrentServerData() != null && !Minecraft.getMinecraft().getCurrentServerData().isOnLAN()) {
+                return new File(".");
+            }
+        } catch (NoSuchMethodError e) {
+            return new File(".");
+        }
+        return Minecraft.getMinecraft().mcDataDir;
     }
 }
