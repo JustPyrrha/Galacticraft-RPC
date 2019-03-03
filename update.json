@@ -1,20 +1,26 @@
 {
   "homepage": "https://joezwet.me/Galacticraft-RPC/",
   "promos": {
-    "1.12.2-latest"      : "2.0.0",
-    "1.12.2-recommended" : "2.0.0",
-    "1.11.2-latest"      : "2.0.0",
-    "1.11.2-recommended" : "2.0.0",
-    "1.10.2-latest"      : "2.0.0",
-    "1.10.2-recommended" : "2.0.0"
+    "1.12.2-latest"      : "2.1.1",
+    "1.12.2-recommended" : "2.1.1",
+    "1.11.2-latest"      : "2.1.1",
+    "1.11.2-recommended" : "2.1.1",
+    "1.10.2-latest"      : "2.1.1",
+    "1.10.2-recommended" : "2.1.1"
   },
   "1.12.2" : {
+    "2.1.1" : "Fix version info.",
+    "2.1.0" : "Fix dimension not changing on Discord.",
     "2.0.0" : "Dynamically generate image keys based off of planet names, support addons, and add config."
   },
   "1.11.2" : {
+    "2.1.1" : "Fix version info.",
+    "2.1.0" : "Fix dimension not changing on Discord.",
     "2.0.0" : "Dynamically generate image keys based off of planet names, support addons, and add config."
   },
   "1.10.2" : {
+    "2.1.1" : "Fix version info.",
+    "2.1.0" : "Fix dimension not changing on Discord.",
     "2.0.0" : "Dynamically generate image keys based off of planet names, support addons, and add config.",
     "1.1.0" : "Renamed to Galacticraft RPC",
     "1.0.0+1" : "Added all dims accessible by Galacticraft and Extra Planets",
