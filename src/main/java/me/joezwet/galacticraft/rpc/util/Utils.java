@@ -16,24 +16,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package me.joezwet.galacticraft.rpc.proxy;
+package me.joezwet.galacticraft.rpc.util;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+public class Utils {
 
-public class CommonProxy {
-
-    public void preInit(FMLPreInitializationEvent event) {
-
+    private String replacePlaceholders(String input, String p) {
+        String output;
+        output = input.replaceAll("@PLANET@", p);
+        output = output.replaceAll("@PARENT@", p);
+        return output;
     }
-
-    public void init(FMLInitializationEvent event) {
-
-    }
-
-    public void postInit(FMLPostInitializationEvent event) {
-
-    }
-
 }

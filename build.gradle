@@ -37,9 +37,13 @@ dependencies {
 
 shadowJar {
     dependencies {
-        include('net.arikira.dev.drpc:.*')
+        include(dependency('net.arikira.dev.drpc:.*'))
     }
     classifier ''
+}
+
+reobfJar {
+    shadowJar {}
 }
 
 processResources

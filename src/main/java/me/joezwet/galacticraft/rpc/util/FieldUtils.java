@@ -16,24 +16,41 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package me.joezwet.galacticraft.rpc.proxy;
+package me.joezwet.galacticraft.rpc.util;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CommonProxy {
+public class FieldUtils {
 
-    public void preInit(FMLPreInitializationEvent event) {
+    // FROM https://stackoverflow.com/a/25526754
 
+    public static Boolean objectHasProperty(Object obj, String propertyName){
+        List<Field> properties = getAllFields(obj);
+        for(Field field : properties){
+            if(field.getName().equalsIgnoreCase(propertyName)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void init(FMLInitializationEvent event) {
-
+    private static List<Field> getAllFields(Object obj){
+        List<Field> fields = new ArrayList<Field>();
+        getAllFieldsRecursive(fields, obj.getClass());
+        return fields;
     }
 
-    public void postInit(FMLPostInitializationEvent event) {
+    private static List<Field> getAllFieldsRecursive(List<Field> fields, Class<?> type) {
+        for (Field field: type.getDeclaredFields()) {
+            fields.add(field);
+        }
 
+        if (type.getSuperclass() != null) {
+            fields = getAllFieldsRecursive(fields, type.getSuperclass());
+        }
+
+        return fields;
     }
-
 }

@@ -1,28 +1,62 @@
+/*
+ * Copyright (c) 2019 Joe van der Zwet
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package me.joezwet.galacticraft.rpc.discord;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.joezwet.galacticraft.rpc.RPC;
+import me.joezwet.galacticraft.rpc.util.FieldUtils;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DiscordEventHandler {
 
     private Logger logger = LogManager.getLogger("Galacticraft RPC");
     private int serverType = 0;
+    private boolean hasSentFirstLogin = false;
+    private int tick = 0;
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void guiScreenDetect(GuiScreenEvent.InitGuiEvent.Pre event) {
         if(event.getGui() instanceof GuiMainMenu) {
@@ -33,30 +67,87 @@ public class DiscordEventHandler {
             );
         }
     }
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent e) {
+        hasSentFirstLogin = false;
+    }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent()
     public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
         if(!event.isLocal()) {
-            if(Minecraft.getMinecraft().getCurrentServerData().serverIP.equalsIgnoreCase("OFFICIAL SERVER")) {
-                DiscordDimSwitcher.switchDim(2);
-            } else {
-                DiscordDimSwitcher.switchDim(1);
-            }
+            DiscordDimSwitcher.switchDim(1);
         } else {
             DiscordDimSwitcher.switchServer(0);
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        DiscordDimSwitcher.switchDim(event.player.dimension);
-        if(ForgeVersion.getResult(Loader.instance().activeModContainer()).status == ForgeVersion.Status.OUTDATED) {
-            event.player.addChatMessage(new TextComponentString(ChatFormatting.BLUE + "[Discord] New version available: " + ForgeVersion.getResult(Loader.instance().activeModContainer()).target.toString()));
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(hasSentFirstLogin) {
+            DiscordTeamUpdater.updateTeam(event.player.getName());
+            return;
         }
+
+        if(FieldUtils.objectHasProperty(event.player, "dimension")) {
+            System.out.println("Dim Checked out");
+            RPC.instance.dimensionInfo.registerDimensionInfo(-1, new Dimension("Exploring the Nether", "planet_earth", "Earth"));
+            RPC.instance.dimensionInfo.registerDimensionInfo(0, new Dimension("Exploring Earth", "planet_earth", "Earth"));
+            RPC.instance.dimensionInfo.registerDimensionInfo(1, new Dimension("Exploring The End", "planet_earth", "Earth"));
+
+            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(0).toString());
+            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(-1).toString());
+            LogManager.getLogger("Galacticraft RPC").info(RPC.instance.dimensionInfo.getDimensionInfo(1).toString());
+
+            LogManager.getLogger("Galacticraft RPC").info("Checking planet ids..");
+            GalaxyRegistry.getRegisteredPlanets().forEach((s,p) -> {
+                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + p.getDimensionID() + " i:" + p.getID());
+                if (p.getDimensionID() != -1 && p.getDimensionID() != 0) {
+                    String capName = s.substring(0, 1).toUpperCase() + s.substring(1);
+                    RPC.instance.dimensionInfo.registerDimensionInfo(p.getDimensionID(), new Dimension("Exploring " + capName, "planet_" + s, capName));
+                }
+            });
+
+            LogManager.getLogger("Galacticraft RPC").info("Checking moon ids..");
+            GalaxyRegistry.getRegisteredMoons().forEach((s,m) -> {
+                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + m.getDimensionID() + " i:" + m.getID());
+                if (m.getDimensionID() != -1 && m.getDimensionID() != 0) {
+                    String capName = s.substring(0, 1).toUpperCase() + s.substring(1);
+                    if(capName.equalsIgnoreCase("moon")) {
+                        RPC.instance.dimensionInfo.registerDimensionInfo(m.getDimensionID(), new Dimension("Exploring the " + capName, "moon_" + s, capName));
+                    } else {
+                        RPC.instance.dimensionInfo.registerDimensionInfo(m.getDimensionID(), new Dimension("Exploring " + capName, "moon_" + s, capName));
+                    }
+
+                }
+            });
+
+            LogManager.getLogger("Galacticraft RPC").info("Checking space station ids..");
+            GalaxyRegistry.getRegisteredSatellites().forEach((s,l) -> {
+                LogManager.getLogger("Galacticraft RPC").info("n:" + s + " d:" + l.getDimensionID() + " i:" + l.getID());
+                String capName = l.getParentPlanet().getName().substring(0,1).toUpperCase() + l.getParentPlanet().getName().substring(1);
+                RPC.instance.dimensionInfo.registerDimensionInfo(l.getDimensionID(), new Dimension("Orbiting " + capName, "planet_" + l.getParentPlanet().getName(), capName));
+            });
+
+            DiscordDimSwitcher.switchDim(event.player.dimension);
+            hasSentFirstLogin = true;
+        }
+
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onPlayerSwitchDim(PlayerEvent.PlayerChangedDimensionEvent event) {
         DiscordDimSwitcher.switchDim(event.toDim);
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onPlayerDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+        hasSentFirstLogin = false;
+        RPC.instance.dimensionInfo.clearDimensions();
     }
 }
