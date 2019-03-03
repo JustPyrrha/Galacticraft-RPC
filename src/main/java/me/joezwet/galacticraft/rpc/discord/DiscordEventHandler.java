@@ -96,4 +96,10 @@ public class DiscordEventHandler {
             DiscordDimSwitcher.switchServer(0);
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onPlayerSwitchDim(PlayerEvent.PlayerChangedDimensionEvent event) {
+        DiscordDimSwitcher.switchDim(event.toDim);
+    }
 }
