@@ -1,4 +1,4 @@
-[![Curse Forge](http://cf.way2muchnoise.eu/short_315405_downloads.svg) ![Versions](https://img.shields.io/badge/For%20MC-1.10.2-red.svg?style=flat-square)](https://minecraft.curseforge.com/projects/galacticraft-rpc)
+[![Curse Forge](http://cf.way2muchnoise.eu/short_315405_downloads.svg) ![Versions](https://img.shields.io/badge/For%20MC-1.10.2%20|%201.11.2%20|%201.12.2-red.svg?style=flat-square)](https://minecraft.curseforge.com/projects/galacticraft-rpc)
 # Galacticraft Rich Presence
 Galacticraft Rich Presence adds Discord Rich Presence support for Galacticraft and it's add-ons!
 You can download GC-RPC from [CurseForge](https://minecraft.curseforge.com/projects/galacticraft-rpc).
