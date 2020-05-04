@@ -30,8 +30,12 @@ configurations {
     compile.extendsFrom shade
 }
 
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
-    shade files('lib/discord-rpc-1.6.0-shaded.jar')
+    shade 'com.github.Vatuu:discord-rpc:1.6.2'
     provided files('lib/GalacticraftCore-Dev-1.12.2-4.0.2.190.jar')
 }
 
