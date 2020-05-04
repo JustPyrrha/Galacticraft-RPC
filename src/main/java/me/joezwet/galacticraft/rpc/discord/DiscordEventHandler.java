@@ -72,7 +72,7 @@ public class DiscordEventHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         try {
             if(!firstInfoSent) {
-                DiscordDimSwitcher.switchDim(Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension());
+                DiscordDimSwitcher.switchDim(Minecraft.getMinecraft().player.world.provider.getDimension());
                 firstInfoSent = true;
             }
         } catch (NoSuchMethodError | NoSuchFieldError  | NullPointerException error) {

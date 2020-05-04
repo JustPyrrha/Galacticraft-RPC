@@ -4,7 +4,7 @@ buildscript {
         maven { url = 'http://files.minecraftforge.net/maven' }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -20,9 +20,9 @@ compileJava {
 
 
 minecraft {
-    version = "1.10.2-12.18.3.2511"
+    version = "1.12.2-14.23.5.2814"
     runDir = "run"
-    mappings = "snapshot_20161111"
+    mappings = "snapshot_20171003"
 }
 
 configurations {
@@ -32,7 +32,7 @@ configurations {
 
 dependencies {
     shade files('lib/discord-rpc-1.6.0-shaded.jar')
-    provided files('lib/GalacticraftCore-Dev-1.10.2-4.0.2.190.jar')
+    provided files('lib/GalacticraftCore-Dev-1.12.2-4.0.2.190.jar')
 }
 
 jar {
