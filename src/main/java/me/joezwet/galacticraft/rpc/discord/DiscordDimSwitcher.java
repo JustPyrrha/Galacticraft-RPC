@@ -18,14 +18,10 @@
 
 package me.joezwet.galacticraft.rpc.discord;
 
-import com.sun.scenario.effect.Offset;
 import me.joezwet.galacticraft.rpc.RPC;
 import me.joezwet.galacticraft.rpc.config.Config;
-import me.joezwet.galacticraft.rpc.config.ConfigHandler;
 import me.joezwet.galacticraft.rpc.util.Utils;
-import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.*;
-import micdoodle8.mods.galacticraft.core.tile.TileEntitySpaceStationBase;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
 import java.time.OffsetDateTime;
@@ -60,6 +56,14 @@ public class DiscordDimSwitcher {
 
         CelestialBody celestialBody = GalaxyRegistry.getCelestialBodyFromDimensionID(dim);
 
+        if(celestialBody == null) { // not a gc dim
+            presence.state = Utils.replacePlaceholders(messages.getOnPlanet(), "an unknown dimension");
+            presence.largeImageKey = "planet_earth";
+            presence.largeImageText = "An Unknown Dimension";
+            RPC.instance.discord.setPresence(presence);
+            return;
+        }
+
         String name = "";
 
         if(celestialBody instanceof  Planet || celestialBody instanceof  Moon) {
@@ -67,7 +71,7 @@ public class DiscordDimSwitcher {
         } else if(celestialBody instanceof Satellite) {
             name = ((Satellite) celestialBody).getParentPlanet().getName();
         }
-        if(name.substring(name.length()-2).equals("EP")) {
+        if(name.length() > 3 && name.substring(name.length()-2).equals("EP")) {
             name = name.substring(0, name.length()-2);
         }
         String cName = name.substring(0, 1).toUpperCase() + name.substring(1);
