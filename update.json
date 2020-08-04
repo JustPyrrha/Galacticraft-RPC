@@ -9,7 +9,7 @@
     "1.10.2-recommended" : "2.1.1"
   },
   "1.12.2" : {
-    "2.2.0" : "General Update"
+    "2.2.0" : "General Update",
     "2.1.1" : "Fix version info.",
     "2.1.0" : "Fix dimension not changing on Discord.",
     "2.0.0" : "Dynamically generate image keys based off of planet names, support addons, and add config."
